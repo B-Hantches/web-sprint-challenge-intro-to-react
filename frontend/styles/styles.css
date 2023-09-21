@@ -68,3 +68,14 @@ footer {
   padding: 1rem;
   color: white;
 }
+
+data-container {
+  display: flex;
+  flex-direction: row; /* Align children in a row */
+}
+.data-column {
+  flex: 1;
+  margin: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
