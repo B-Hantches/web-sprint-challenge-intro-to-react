@@ -1,22 +1,45 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-function Character(props) {
-  const [showHomeworld, setShowHomeworld] = useState(false);
+function Character() {
+  const [characters, setCharacters] = useState([]);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
 
-  const toggleHomeworld = () => {
-    setShowHomeworld(!showHomeworld);
-  }
+  const fetchCharacters = async () => {
+    try {
+      const response = await axios.get('https://swapi.dev/api/people/');
+      setCharacters(response.data.results);
+    } catch (error) {
+      console.error('Error fetching characters:', error);
+    }
+  };
+
+  const fetchHomeWorld = async (homeworldURL) => {
+    try {
+      const response = await axios.get(homeworldURL);
+      setSelectedCharacter(response.data);
+    } catch (error) {
+      console.error('Error fetching homeworld:', error);
+    }
+  };
 
   return (
     <div>
-      <h1 onClick={toggleHomeworld}>
-        {props.person.name}
-        {showHomeworld ? " - Homeworld Showing" : " - Homeworld Hidden"}
-      </h1>
-      {showHomeworld && (
-        <div className='homeWorld container'>
-          {/* Display homeworld information here */}
-          <p>Homeworld: {props.person.homeworld}</p>
+      <button onClick={fetchCharacters}>Fetch Star Wars Characters</button>
+      <ul>
+        {characters.map((character) => (
+          <li key={character.name}>
+            {character.name}{' '}
+            <button onClick={() => fetchHomeWorld(character.homeworld)}>
+              Show Home World
+            </button>
+          </li>
+        ))}
+      </ul>
+      {selectedCharacter && (
+        <div>
+          <h2>{selectedCharacter.name}</h2>
+          <p>Population: {selectedCharacter.population}</p>
         </div>
       )}
     </div>
