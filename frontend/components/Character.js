@@ -1,49 +1,36 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react'
 
-function Character() {
-  const [characters, setCharacters] = useState([]);
-  const [selectedCharacter, setSelectedCharacter] = useState(null);
-
-  const fetchCharacters = async () => {
-    try {
-      const response = await axios.get('https://swapi.dev/api/people/');
-      setCharacters(response.data.results);
-    } catch (error) {
-      console.error('Error fetching characters:', error);
+function Character(props) { 
+    console.log(props.person.name)
+    const {homeworlds, person} = props;
+    console.log()
+    const [showHomeworld, setShowHomeworld ] = useState(false);
+    const toggleHomeworld = () => {
+        setShowHomeworld(!showHomeworld);
     }
-  };
-
-  const fetchHomeWorld = async (homeworldURL) => {
-    try {
-      const response = await axios.get(homeworldURL);
-      setSelectedCharacter(response.data);
-    } catch (error) {
-      console.error('Error fetching homeworld:', error);
-    }
-  };
-
+    // ❗ Add the props
+  // ❗ Create a state to hold whether the homeworld is rendering or not
+  // ❗ Create a "toggle" click handler to show or remove the homeworld
   return (
-    <div>
-      <button onClick={fetchCharacters}>Fetch Star Wars Characters</button>
-      <ul>
-        {characters.map((character) => (
-          <li key={character.name}>
-            {character.name}{' '}
-            <button onClick={() => fetchHomeWorld(character.homeworld)}>
-              Show Home World
-            </button>
-          </li>
-        ))}
-      </ul>
-      {selectedCharacter && (
-        <div>
-          <h2>{selectedCharacter.name}</h2>
-          <p>Population: {selectedCharacter.population}</p>
-        </div>
+   
+    <div onClick={toggleHomeworld} className='character-card'>
+    <h3 className='character-name'>{props.person.name}</h3>
+    {showHomeworld 
+    ? <p>planet:
+  <span className='character-planet'>
+      {homeworlds.map((planet)=>{
+        if (planet.id === person.homeworld){
+          return planet.name
+        }
+        }
       )}
+    </span>
+    </p>
+    
+    : null
+    }
     </div>
-  );
-}
+    )
+  }
 
-export default Character;
+export default Character 

@@ -14,6 +14,7 @@ function App() {
   useEffect (() => {
     axios.get(urlPlanets)
     .then((response) => {
+      console.log(response.data,"planets")
       setPlanets(response.data);
     })
     .catch((error)=> {
@@ -21,6 +22,7 @@ function App() {
     });
     axios.get(urlPeople)
     .then((response) => {
+      console.log(response.data,"people")
       setPeople(response.data);
     })
     .catch((error) => {
@@ -33,7 +35,7 @@ function App() {
       <p>See the README of the project for instructions on completing this challenge</p>
       {/* ❗ Map over the data in state, rendering a Character at each iteration */}
       {people.map((person) => (
-        <Character key={person.id} person={person} homeworld={planets} />
+        <Character key={person.id} person={person} homeworlds={planets} />
       ))}
       
     </div>
